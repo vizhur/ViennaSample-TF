@@ -24,15 +24,20 @@ from __future__ import print_function
 
 import argparse
 import sys
+import pandas
 
 from tensorflow.examples.tutorials.mnist import input_data
 
 import tensorflow as tf
 
+from azureml_sdk import data_collector
+
 FLAGS = None
 
 
 def main(_):
+  run_logger = data_collector.current_run() 
+
   # Import data
   mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
 
@@ -60,6 +65,7 @@ def main(_):
 
   sess = tf.InteractiveSession()
   tf.global_variables_initializer().run()
+  metrics = []
   # Train
   for i in range(1000):
     batch_xs, batch_ys = mnist.train.next_batch(100)
@@ -69,7 +75,11 @@ def main(_):
       # Test trained model
       correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
       accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-      print ("iteration {}, accuracy {}".format(i, sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels})))
+      acc = sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels})
+      print ("iteration {}, accuracy {}".format(i, acc))
+      metrics.append({'Accuracy': acc})
+    
+  run_logger.log(pandas.DataFrame(metrics))
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
