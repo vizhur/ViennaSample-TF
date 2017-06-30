@@ -2,6 +2,7 @@
 
 Run tf_mnist.py in local conda environment.
 ```
+$ pip install tensorflow
 $ az ml execute start -c local tf_mnist.py
 ```
 
