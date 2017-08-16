@@ -81,8 +81,7 @@ def main(_):
     
   run_logger.log(pandas.DataFrame(metrics))
 
-#if __name__ == '__main__':
-if 1 == 1:
+if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   parser.add_argument('--data_dir', type=str, default='/tmp/tensorflow/mnist/input_data',
                       help='Directory for storing input data')
