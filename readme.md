@@ -27,3 +27,5 @@ Run tf_mnist.py in a Docker container in a remote machine with GPU.
 ```
 $ az ml execute start -c gpu tf_mnist.py
 ```
+
+For more information on using GPU in Vienna execution, read [this article](https://github.com/Azure/ViennaDocs/blob/master/Documentation/gpu-execution.md).
