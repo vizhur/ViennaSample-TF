@@ -10,6 +10,10 @@ Project: https://github.com/aymericdamien/TensorFlow-Examples/
 from __future__ import print_function
 
 import tensorflow as tf
+import pandas
+from azureml.sdk import data_collector
+
+run_logger = data_collector.current_run()
 
 # Import MNIST data
 from tensorflow.examples.tutorials.mnist import input_data
@@ -111,6 +115,8 @@ with tf.Session() as sess:
     sess.run(init)
     step = 1
     # Keep training until reach max iterations
+    metrics = []
+    losses = []
     while step * batch_size < training_iters:
         batch_x, batch_y = mnist.train.next_batch(batch_size)
         # Run optimization op (backprop)
@@ -124,8 +130,12 @@ with tf.Session() as sess:
             print("Iter " + str(step*batch_size) + ", Minibatch Loss= " + \
                   "{:.6f}".format(loss) + ", Training Accuracy= " + \
                   "{:.5f}".format(acc))
+            metrics.append({'Accuracy': acc})
+            losses.append({'Loss': loss})
         step += 1
     print("Optimization Finished!")
+    run_logger.log(pandas.DataFrame(metrics))
+    run_logger.log(pandas.DataFrame(losses))
 
     # Calculate accuracy for 256 mnist test images
     print("Testing Accuracy:", \
