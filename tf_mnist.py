@@ -11,9 +11,9 @@ from __future__ import print_function
 
 import tensorflow as tf
 import pandas
-from azureml.sdk import data_collector
+from azureml.logging import get_azureml_logger
 
-run_logger = data_collector.current_run()
+run_logger = get_azureml_logger()
 
 # Import MNIST data
 from tensorflow.examples.tutorials.mnist import input_data
